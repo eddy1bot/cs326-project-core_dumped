@@ -15,6 +15,7 @@
     <div id="Paycheck">
         <label for="Paycheck_input">Paycheck Amount: </label>
         <input type="text" id="Paycheck_input"/>
+        <input type="button" value="Calculate" class="small-btn" id="UAR_calculate_button"/>
     </div>
     <!--This contains all UAR elements to display remaining balance
     and to post a new transaction-->
@@ -23,6 +24,8 @@
             <label for="UAR_remaining"
                 id="UAR_remaining_label">UAR remaining: </label>
             <input type="text" id="UAR_remaining" readonly />
+            <label for="post_transaction"
+            id="post_transaction_label">Post new transaction: </label>
             <input type="text" placeholder="Amount.." class="transaction" id="transaction_amt" />
             <input type="button" class="transaction" value="POST"
                 id="transaction_post" />

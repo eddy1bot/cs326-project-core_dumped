@@ -20,24 +20,37 @@
     grid-column-end: 4;
 }
 
+#post_transaction_label {
+    grid-row-start: 5;
+    grid-row-end: 5;
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+
 #transaction_post {
-    grid-row-start: 3;
-    grid-row-end: 3;
+    grid-row-start: 6;
+    grid-row-end: 6;
     grid-column-start: 3;
     grid-column-end: 4;
 }
 
 #transaction_amt {
-    grid-row-start: 3;
-    grid-row-end: 3;
+    grid-row-start: 6;
+    grid-row-end: 6;
     grid-column-start: 1;
     grid-column-end: 3;
 }
 
 
 #transaction_des {
-    grid-row-start: 4;
-    grid-row-end: 11;
+    grid-row-start: 7;
+    grid-row-end: 13;
     grid-column-start: 1;
     grid-column-end: 4;
+}
+
+.small-btn {
+    width: 75px;
+    height: 30px;
+    font-size: 12px;
 }

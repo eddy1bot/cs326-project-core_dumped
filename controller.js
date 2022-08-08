@@ -5,7 +5,6 @@ export class Controller {
         if(window.localStorage.getItem('expenseLedger') === null) {
             this.expenseLedger = [];
         } else {
-            console.log('true');
             this.expenseLedger =
                 JSON.parse(window.localStorage.getItem('expenseLedger'));
         }
@@ -17,6 +16,10 @@ export class Controller {
             this.transactionLedger =
                 JSON.parse(window.localStorage.getItem('transactionLedger'));
         }
+
+        //Initalize UAR
+        this.UAR = 0;
+        this.paycheck = 0;
     }
 
 
@@ -26,6 +29,10 @@ export class Controller {
      */
     addTransaction(object) {
         this.transactionLedger.push(object);
+
+        //save changes
+        window.localStorage.setItem('transactionLedger',
+            JSON.stringify(this.transactionLedger));
     }
 
 
@@ -41,6 +48,11 @@ export class Controller {
         //save changes
         window.localStorage.setItem('expenseLedger',
             JSON.stringify(this.expenseLedger));
+
+        console.log(document.getElementById("Paycheck_input").value);
+        if(document.getElementById("Paycheck_input").value != '') {
+            this.calculateUAR();
+        }
     }
 
 
@@ -55,6 +67,11 @@ export class Controller {
                 i--;
             }
         }
+
+        //save changes
+        window.localStorage.setItem('transactionLedger',
+            JSON.stringify(this.transactionLedger));
+
     }
 
     /** Removes the given expense to the ledger array of expenses
@@ -74,7 +91,12 @@ export class Controller {
 
         //save changes
         window.localStorage.setItem('expenseLedger',
-        JSON.stringify(this.expenseLedger));
+            JSON.stringify(this.expenseLedger));
+
+        console.log(document.getElementById("Paycheck_input").value);
+        if(document.getElementById("Paycheck_input").value != '') {
+            this.calculateUAR();
+        }
     }
 
     /**
@@ -90,5 +112,40 @@ export class Controller {
             document.getElementById("expense_list").value +=
                 v.title + " (" + v.frequency + ") - $" + v.amount + "\n\n";
         });
+    }
+
+
+    // fillValues() {
+    //     console.log(window.localStorage.getItem('Paycheck_input'));
+    //     if (window.localStorage.getItem('Paycheck_input') != null) {
+    //         document.getElementById("Paycheck_input").value =
+    //             window.localStorage.getItem('Paycheck_input');
+    //     }
+
+    // }
+
+    calculateUAR() {
+        //get paycheck and check for $
+        const tentativePaycheck = document.getElementById("Paycheck_input").value;
+        let paycheck =
+        parseInt(tentativePaycheck[0] === '$' ?
+            tentativePaycheck.slice(1) : tentativePaycheck);
+
+        //check for valid input
+        if(isNaN(paycheck)) {
+            window.alert("Please enter a valid numberical paycheck amount");
+        } else {
+
+            this.expenseLedger.forEach( (v) => {
+                if(v.frequency === 'Weekly') {
+                    paycheck -= v.amount;
+                } else if (v.frequency === 'Biweekly') {
+                    paycheck -= (v.amount / 2);
+                } else {
+                    paycheck -= (v.amount / 4);
+                }
+            });
+            document.getElementById("UAR_remaining").value = JSON.stringify(paycheck);
+        }
     }
 }
