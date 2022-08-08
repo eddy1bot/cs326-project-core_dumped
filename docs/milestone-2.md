@@ -33,3 +33,13 @@ partition individual bank accounts into several 'virtual accounts' which are
 kept track of through the application log. This way, despite the funds being
 pooled together in the bank account, the application can specify exactly how
 much of that lump sum has been earmarked for any given purpose (virtual account)
+
+
+
+## Application rendered in the browser (see video below for description of components).....
+
+
+![alt text for screen readers](./Screen%20Shot%202022-08-08%20at%203.51.16%20PM.png "Text to show on mouseover")
+
+
+### https://www.loom.com/share/b1dfd724437540dbb7e66079fcc3dcba
