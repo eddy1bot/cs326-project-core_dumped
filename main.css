@@ -1,0 +1,43 @@
+#UAR {
+    width: 300px;
+    height: 100px;
+    margin: auto;
+    display: grid;
+    gap: 20px;
+}
+
+#UAR_remaining_label {
+    grid-row-start: 1;
+    grid-row-end: 1;
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+
+#UAR_remaining {
+    grid-row-start: 2;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+
+#transaction_post {
+    grid-row-start: 3;
+    grid-row-end: 3;
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
+
+#transaction_amt {
+    grid-row-start: 3;
+    grid-row-end: 3;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+
+#transaction_des {
+    grid-row-start: 4;
+    grid-row-end: 11;
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
