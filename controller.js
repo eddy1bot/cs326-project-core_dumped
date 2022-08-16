@@ -31,8 +31,10 @@ export class Controller {
             // the first and last characters and parse that to avoid
             // attempting to parse the "/" characters
             let paycheck_string = window.localStorage.getItem('Paycheck_input');
-            this.paycheck = parseInt(paycheck_string.substring(1,
-                (paycheck_string.length - 1)));
+            console.log(paycheck_string.split(''));
+            this.paycheck = parseInt(paycheck_string);
+            // this.paycheck = parseInt(paycheck_string.substring(1,
+            //     (paycheck_string.length - 1)));
 
             document.getElementById("Paycheck_input").value = this.paycheck;
 
@@ -76,7 +78,7 @@ export class Controller {
         window.localStorage.setItem('expenseLedger',
             JSON.stringify(this.expenseLedger));
 
-        //recalculate UAR
+        //recalculate
         if(document.getElementById("Paycheck_input").value != '') {
             this.calculateUAR();
         }

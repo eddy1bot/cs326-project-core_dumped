@@ -8,7 +8,9 @@ const controller = new Controller();
 controller.printExpenseLedger();
 controller.printTransactionLedger();
 
-
+/**
+ * Event listener for "Add" expense button on bottom left of screen
+ */
 document.getElementById("add_expense_button").addEventListener("click", () => {
     //get the values from the fields
     const title = document.getElementById("expense_title").value;
@@ -31,6 +33,10 @@ document.getElementById("add_expense_button").addEventListener("click", () => {
     }
 });
 
+
+/**
+ * Event listener for "Remove" expense button on bottom left of screen
+ */
 document.getElementById("remove_expense_button").addEventListener("click", () => {
     //get the values from the fields
     const title = document.getElementById("expense_title").value;
@@ -53,6 +59,10 @@ document.getElementById("remove_expense_button").addEventListener("click", () =>
     }
 });
 
+
+/**
+ * Event listener for "Remove" transaction button on bottom right of screen
+ */
 document.getElementById("remove_trans_button").addEventListener("click", () => {
         //get the values from the amount and transaction fields
         const description = document.getElementById("trans_des").value
@@ -78,12 +88,20 @@ document.getElementById("remove_trans_button").addEventListener("click", () => {
 });
 
 
+/**
+ * Event listener for UAR "Calculate" button on top right of screen
+ */
 document.getElementById("UAR_calculate_button").addEventListener("click", () => {
         controller.calculateUAR();
         window.localStorage.setItem("Paycheck_input",
-            JSON.stringify(document.getElementById("Paycheck_input").value));
+            document.getElementById("Paycheck_input").value);
 });
 
+
+
+/**
+ * Event listener for transaction "POST" button in middle of screen
+ */
 document.getElementById("transaction_post").addEventListener("click", () => {
         //get the values from the amount and transaction fields
         const description =
@@ -108,4 +126,45 @@ document.getElementById("transaction_post").addEventListener("click", () => {
             document.getElementById("transaction_amt").value = '';
             document.getElementById("transaction_des").value = '';
         }
+});
+
+
+/**
+ * Event listener for transaction "POST" button in middle of screen
+ */
+ document.getElementById("add_rev_button").addEventListener("click", () => {
+
+    //confirm that current entered paycheck has been saved and that data
+    // currently displayed on screen reflects current paycheck amount
+    if (document.getElementById("Paycheck_input").value !=
+        window.localStorage.getItem("Paycheck_input")) {
+            window.alert("Please click the 'calculate' button to first" +
+            " calculate the new paycheck amount before attempting to" +
+            " add funds");
+    } else {
+        //get the value from the amount field
+        let tentativeAmount = document.getElementById("add_rev_input").value;
+
+        //check if amount is specified
+        if(tentativeAmount === '') {
+        window.alert("Please enter amount of additional revenue to add");
+        } else {
+            const amount =
+            parseInt(tentativeAmount[0] === '$' ?
+                tentativeAmount.slice(1) : tentativeAmount);
+
+            console.log(controller.paycheck);
+            console.log(typeof amount);
+            controller.paycheck += amount;
+            controller.calculateUAR();
+
+            window.localStorage.setItem("Paycheck_input",
+                JSON.stringify(controller.paycheck));
+
+            document.getElementById("Paycheck_input").value =
+                (controller.paycheck);
+
+            document.getElementById("add_rev_input").value = '';
+        }
+    }
 });
