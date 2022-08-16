@@ -36,7 +36,7 @@
     <!--UI elements to add an expense-->
     <div id="current_expenses">
         <br>
-        <label for="expense_list">Current expenses:</label><br>
+        <label for="expense_list">Current regular expenses:</label><br>
         <textarea id="expense_list" rows="15" cols="20" readonly></textarea>
     </div> <br>
     <div id="add_expense">
@@ -53,6 +53,11 @@
         id="add_expense_button" />
         <input type="button" value="Remove"
         id="remove_expense_button" />
+    </div>
+    <!--UI elements to display transaction log-->
+    <div id="transaction_log">
+        <label for="transaction_list">Transaction history:</label><br>
+        <textarea id="transaction_list" rows="15" cols="20" readonly></textarea>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"

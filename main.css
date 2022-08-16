@@ -54,3 +54,10 @@
     height: 30px;
     font-size: 12px;
 }
+
+#transaction_log {
+    position: absolute;
+    right: 1px;
+    top: 150px;
+    width: 200px;
+}

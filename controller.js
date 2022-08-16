@@ -17,9 +17,29 @@ export class Controller {
                 JSON.parse(window.localStorage.getItem('transactionLedger'));
         }
 
-        //Initalize UAR
-        this.UAR = 0;
-        this.paycheck = 0;
+        //initalize transaction ledger
+        if(window.localStorage.getItem('Paycheck_input') === null) {
+            //Initalize UAR
+            this.UAR = 0;
+            this.paycheck = 0;
+        } else {
+            //NOTE: this is super weird what I did here; for some reason
+            // when I was retrieving the paycheck value, there were forward
+            // slashes appended to the beginning and end which caused the
+            // parseInt to continually return NaN. Therefore, in the
+            // implementation below, I take the substring which ignores
+            // the first and last characters and parse that to avoid
+            // attempting to parse the "/" characters
+            let paycheck_string = window.localStorage.getItem('Paycheck_input');
+            this.paycheck = parseInt(paycheck_string.substring(1,
+                (paycheck_string.length - 1)));
+
+            document.getElementById("Paycheck_input").value = this.paycheck;
+
+            this.UAR = parseInt(window.localStorage.getItem("UAR"));
+
+            document.getElementById("UAR_remaining").value = this.UAR;
+        }
     }
 
 
@@ -30,9 +50,16 @@ export class Controller {
     addTransaction(object) {
         this.transactionLedger.push(object);
 
+        this.printTransactionLedger();
+
         //save changes
         window.localStorage.setItem('transactionLedger',
             JSON.stringify(this.transactionLedger));
+
+        //recalculate UAR
+        if(document.getElementById("Paycheck_input").value != '') {
+            this.calculateUAR();
+        }
     }
 
 
@@ -49,7 +76,6 @@ export class Controller {
         window.localStorage.setItem('expenseLedger',
             JSON.stringify(this.expenseLedger));
 
-        console.log(document.getElementById("Paycheck_input").value);
         if(document.getElementById("Paycheck_input").value != '') {
             this.calculateUAR();
         }
@@ -93,7 +119,6 @@ export class Controller {
         window.localStorage.setItem('expenseLedger',
             JSON.stringify(this.expenseLedger));
 
-        console.log(document.getElementById("Paycheck_input").value);
         if(document.getElementById("Paycheck_input").value != '') {
             this.calculateUAR();
         }
@@ -114,22 +139,29 @@ export class Controller {
         });
     }
 
+    /**
+     * Prints the current state of the expense ledger into the text area
+     * which represents the visible expense ledger
+     */
+    printTransactionLedger() {
+    //clear the visible ledger
+    document.getElementById("transaction_list").value = '';
 
-    // fillValues() {
-    //     console.log(window.localStorage.getItem('Paycheck_input'));
-    //     if (window.localStorage.getItem('Paycheck_input') != null) {
-    //         document.getElementById("Paycheck_input").value =
-    //             window.localStorage.getItem('Paycheck_input');
-    //     }
+    //reprint ledger based on updated ledger array
+    this.transactionLedger.forEach( (v) => {
+        document.getElementById("transaction_list").value +=
+            v.description + " - $" + v.amount + "\n";
+    });
+}
 
-    // }
 
     calculateUAR() {
         //get paycheck and check for $
         const tentativePaycheck = document.getElementById("Paycheck_input").value;
-        let paycheck =
-        parseInt(tentativePaycheck[0] === '$' ?
-            tentativePaycheck.slice(1) : tentativePaycheck);
+        let paycheck = tentativePaycheck[0] === '$' ?
+            tentativePaycheck.slice(1) : tentativePaycheck;
+        paycheck = parseInt(paycheck);
+
 
         //check for valid input
         if(isNaN(paycheck)) {
@@ -145,7 +177,15 @@ export class Controller {
                     paycheck -= (v.amount / 4);
                 }
             });
-            document.getElementById("UAR_remaining").value = JSON.stringify(paycheck);
+
+            this.transactionLedger.forEach( (v) => {
+                paycheck -= v.amount;
+            });
+
+            document.getElementById("UAR_remaining").value =
+                JSON.stringify(paycheck);
+
+            window.localStorage.setItem("UAR", JSON.stringify(paycheck));
         }
     }
 }

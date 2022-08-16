@@ -1,13 +1,12 @@
 import { Controller } from "./controller.js";
 import { Expense } from "./expense.js";
+import { Transaction } from "./transaction.js";
 
 
 
 const controller = new Controller();
-//window.localStorage.removeItem('expenseLedger');
-//window.localStorage.removeItem('Paycheck_input');
 controller.printExpenseLedger();
-//controller.fillValues();
+controller.printTransactionLedger();
 
 
 document.getElementById("add_expense_button").addEventListener("click", () => {
@@ -30,7 +29,6 @@ document.getElementById("add_expense_button").addEventListener("click", () => {
         //add expense object to array ledger
         controller.addExpense(expense);
     }
-
 });
 
 document.getElementById("remove_expense_button").addEventListener("click", () => {
@@ -58,21 +56,32 @@ document.getElementById("remove_expense_button").addEventListener("click", () =>
 
 document.getElementById("UAR_calculate_button").addEventListener("click", () => {
         controller.calculateUAR();
+        window.localStorage.setItem("Paycheck_input",
+            JSON.stringify(document.getElementById("Paycheck_input").value));
 });
 
-// document.getElementById("Paycheck_input").addEventListener("keyup", () => {
+document.getElementById("transaction_post").addEventListener("click", () => {
+        //get the values from the amount and transaction fields
+        const description =
+        document.getElementById("transaction_des").value === '' ?
+        "Unspecified" : document.getElementById("transaction_des").value;
 
-//      //get paycheck and check for $
-//      const tentativePaycheck = document.getElementById("Paycheck_input").value;
-//      let paycheck =
-//      parseInt(tentativePaycheck[0] === '$' ?
-//          tentativePaycheck.slice(1) : tentativePaycheck);
+        let tentativeAmount = document.getElementById("transaction_amt").value;
 
-//      //check for valid input
-//      if(isNaN(paycheck)) {
-//          window.alert("Please enter a valid numberical paycheck amount");
-//      } else {
-//         window.localStorage.setItem("Paycheck_input",
-//         JSON.stringify(controller.paycheck));
-//      }
-// });
+        //check if amount is specified
+        if(tentativeAmount === '') {
+            window.alert("Please enter the amount of the transaction to add");
+        } else {
+            const amount =
+            parseInt(tentativeAmount[0] === '$' ?
+                tentativeAmount.slice(1) : tentativeAmount);
+
+            const transaction = new Transaction(amount, description);
+
+            //add expense object to array ledger
+            controller.addTransaction(transaction);
+
+            document.getElementById("transaction_amt").value = '';
+            document.getElementById("transaction_des").value = '';
+        }
+});
