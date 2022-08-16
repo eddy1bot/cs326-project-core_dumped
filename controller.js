@@ -31,7 +31,6 @@ export class Controller {
             // the first and last characters and parse that to avoid
             // attempting to parse the "/" characters
             let paycheck_string = window.localStorage.getItem('Paycheck_input');
-            console.log(paycheck_string.split(''));
             this.paycheck = parseInt(paycheck_string);
             // this.paycheck = parseInt(paycheck_string.substring(1,
             //     (paycheck_string.length - 1)));

@@ -93,6 +93,9 @@ document.getElementById("remove_trans_button").addEventListener("click", () => {
  */
 document.getElementById("UAR_calculate_button").addEventListener("click", () => {
         controller.calculateUAR();
+
+        controller.paycheck = document.getElementById("Paycheck_input").value
+
         window.localStorage.setItem("Paycheck_input",
             document.getElementById("Paycheck_input").value);
 });
@@ -153,9 +156,7 @@ document.getElementById("transaction_post").addEventListener("click", () => {
             parseInt(tentativeAmount[0] === '$' ?
                 tentativeAmount.slice(1) : tentativeAmount);
 
-            console.log(controller.paycheck);
-            console.log(typeof amount);
-            controller.paycheck += amount;
+            controller.paycheck = (parseInt(controller.paycheck, 10) + amount);
             controller.calculateUAR();
 
             window.localStorage.setItem("Paycheck_input",
