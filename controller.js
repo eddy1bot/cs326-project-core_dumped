@@ -76,6 +76,7 @@ export class Controller {
         window.localStorage.setItem('expenseLedger',
             JSON.stringify(this.expenseLedger));
 
+        //recalculate UAR
         if(document.getElementById("Paycheck_input").value != '') {
             this.calculateUAR();
         }
@@ -88,15 +89,22 @@ export class Controller {
      */
     removeTransaction(object) {
         for (let i = 0; i < this.transactionLedger.length; i++){
-            if (this.transactionLedger[i] === object) {
+            if (JSON.stringify(this.transactionLedger[i]) ===
+                JSON.stringify(object)) {
                 this.transactionLedger.splice(i, 1);
                 i--;
             }
         }
+        this.printTransactionLedger();
 
         //save changes
         window.localStorage.setItem('transactionLedger',
             JSON.stringify(this.transactionLedger));
+
+        //recalculate UAR
+        if(document.getElementById("Paycheck_input").value != '') {
+            this.calculateUAR();
+        }
 
     }
 
@@ -108,7 +116,6 @@ export class Controller {
         for (let i = 0; i < this.expenseLedger.length; i++){
             if (JSON.stringify(this.expenseLedger[i]) ===
                 JSON.stringify(object)) {
-
                 this.expenseLedger.splice(i, 1);
                 i--;
             }

@@ -61,3 +61,10 @@
     top: 150px;
     width: 200px;
 }
+
+#remove_transaction {
+    position: absolute;
+    right: 1px;
+    top: 575px;
+    width: 200px;
+}

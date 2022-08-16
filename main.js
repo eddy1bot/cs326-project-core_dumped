@@ -53,6 +53,30 @@ document.getElementById("remove_expense_button").addEventListener("click", () =>
     }
 });
 
+document.getElementById("remove_trans_button").addEventListener("click", () => {
+        //get the values from the amount and transaction fields
+        const description = document.getElementById("trans_des").value
+        let tentativeAmount = document.getElementById("trans_amt").value;
+
+        //check if amount is specified
+        if(tentativeAmount === '' || description === '') {
+            window.alert("Please enter the amount and description" +
+                "of the transaction you wish to remove");
+        } else {
+            const amount =
+            parseInt(tentativeAmount[0] === '$' ?
+                tentativeAmount.slice(1) : tentativeAmount);
+
+            const transaction = new Transaction(amount, description);
+
+            //add expense object to array ledger
+            controller.removeTransaction(transaction);
+
+            document.getElementById("trans_amt").value = '';
+            document.getElementById("trans_des").value = '';
+        }
+});
+
 
 document.getElementById("UAR_calculate_button").addEventListener("click", () => {
         controller.calculateUAR();
