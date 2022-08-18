@@ -4,7 +4,7 @@ import { Database } from './database.js';
 import express from "express";
 import logger from "morgan";
 
-class theServer {
+class Server {
     constructor(dburl) {
         this.dburl = dburl;
         this.app = express();
@@ -17,8 +17,70 @@ class theServer {
     async initRoutes() {
         const self = this;
 
-        //INSERT THE ROUTES HERE
+        /**
+         * Route for saving an expense to database
+         * Returns a json object indicating success
+         */
+        self.app.post('/logExpense', async (request, response) => {
+            try {
+                const {title, amt, freq} = request.body;
+                await self.database.saveExpense(title, amt, freq);
+                response.status(200).json({ "status" : "success" });
+            } catch (error) {
+                console.log("Logging expense failed, error is...");
+                console.log(error);
+                response.status(500).send(error);
+            }
+        });
 
+
+        /**
+         * Route for saving a transaction to database
+         * Returns a json object indicating success
+         */
+        self.app.post('/logTransaction', async (request, response) => {
+            try {
+                const {amt, des} = request.body;
+                await self.database.saveTransaction(amt, des);
+                response.status(200).json({ "status" : "success" });
+            } catch (error) {
+                console.log("Logging transaction failed, error is...");
+                console.log(error);
+                response.status(500).send(error);
+            }
+        });
+
+        /**
+         * Route for getting the expense ledger/log
+         * Returns json, an array of all expense objects
+         */
+        self.app.get('/getExpenseLog', async (request, response) => {
+            try {
+                const dataArray = await self.database.getExpenseLedger();
+                response.status(200).json(dataArray);
+            } catch (error) {
+                console.log("Expense log retrieval failed, error is...");
+                console.log(error);
+                response.status(500).send(error);
+            }
+        });
+
+        /**
+         * Route for getting the transaction ledger/log
+         * Returns json, an array of all transaction objects
+         */
+        self.app.get('/getTransactionLog', async (request, response) => {
+            try {
+                const dataArray = await self.database.getTransactionLedger();
+                response.status(200).json(dataArray);
+            } catch (error) {
+                console.log("Transaction log retrieval failed, error is...");
+                console.log(error);
+                response.status(500).send(error);
+            }
+        });
+
+        //route to respond to bad requests
         self.app.all('*', async (request, response) => {
             response.status(404).send(`
                 Im so sorry but the path ${request.path} was not found`);
