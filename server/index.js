@@ -88,9 +88,7 @@ class Server {
             try {
                 const {title, amt, freq} = request.body;
                 await self.database.deleteExpense(title, amt, freq);
-                response.status(200).send(`
-                    Successfully deleted {title : ${title},
-                    amt : ${amt},
+                response.status(200).send(`{title : ${title}, amt : ${amt},
                     freq : ${freq}}`);
             } catch (error) {
                 console.log("Expense deletion failed, error is...");
@@ -107,8 +105,7 @@ class Server {
             try {
                 const {amt, des} = request.body;
                 await self.database.deleteTransaction(amt, des);
-                response.status(200).send(`
-                    Successfully deleted {amt : ${amt}, des : ${des}}`);
+                response.status(200).send(`{amt : ${amt}, des : ${des}}`);
             } catch (error) {
                 console.log("Transaction deletion failed, error is...");
                 console.log(error);

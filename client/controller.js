@@ -1,23 +1,26 @@
+import * as crud from "./clientCRUD.js";
+
 export class Controller {
 
     constructor() {
         //initalize the expense array
-        if(window.localStorage.getItem('expenseLedger') === null) {
-            this.expenseLedger = [];
-        } else {
-            this.expenseLedger =
-                JSON.parse(window.localStorage.getItem('expenseLedger'));
-        }
+        this.expenseLedger = crud.getExpenseLedger();
+        // if(window.localStorage.getItem('expenseLedger') === null) {
+        //     this.expenseLedger = [];
+        // } else {
+        //     this.expenseLedger =
+        //         JSON.parse(window.localStorage.getItem('expenseLedger'));
+        // }
 
         //initalize transaction ledger
-        if(window.localStorage.getItem('transactionLedger') === null) {
-            this.transactionLedger = [];
-        } else {
-            this.transactionLedger =
-                JSON.parse(window.localStorage.getItem('transactionLedger'));
-        }
+        this.transactionLedger = crud.getTransactionLedger();
+        // if(window.localStorage.getItem('transactionLedger') === null) {
+        //     this.transactionLedger = [];
+        // } else {
+        //     this.transactionLedger =
+        //         JSON.parse(window.localStorage.getItem('transactionLedger'));
+        // }
 
-        //initalize transaction ledger
         if(window.localStorage.getItem('Paycheck_input') === null) {
             //Initalize UAR
             this.UAR = 0;
@@ -54,8 +57,9 @@ export class Controller {
         this.printTransactionLedger();
 
         //save changes
-        window.localStorage.setItem('transactionLedger',
-            JSON.stringify(this.transactionLedger));
+        crud.logTransaction(object);
+        // window.localStorage.setItem('transactionLedger',
+        //     JSON.stringify(this.transactionLedger));
 
         //recalculate UAR
         if(document.getElementById("Paycheck_input").value != '') {
@@ -74,8 +78,9 @@ export class Controller {
         this.printExpenseLedger();
 
         //save changes
-        window.localStorage.setItem('expenseLedger',
-            JSON.stringify(this.expenseLedger));
+        crud.logExpense(object);
+        // window.localStorage.setItem('expenseLedger',
+        //     JSON.stringify(this.expenseLedger));
 
         //recalculate
         if(document.getElementById("Paycheck_input").value != '') {
@@ -99,8 +104,9 @@ export class Controller {
         this.printTransactionLedger();
 
         //save changes
-        window.localStorage.setItem('transactionLedger',
-            JSON.stringify(this.transactionLedger));
+        crud.deleteTransaction(object);
+        // window.localStorage.setItem('transactionLedger',
+        //     JSON.stringify(this.transactionLedger));
 
         //recalculate UAR
         if(document.getElementById("Paycheck_input").value != '') {
@@ -124,8 +130,9 @@ export class Controller {
         this.printExpenseLedger();
 
         //save changes
-        window.localStorage.setItem('expenseLedger',
-            JSON.stringify(this.expenseLedger));
+        crud.deleteExpense(object);
+        // window.localStorage.setItem('expenseLedger',
+        //     JSON.stringify(this.expenseLedger));
 
         if(document.getElementById("Paycheck_input").value != '') {
             this.calculateUAR();
