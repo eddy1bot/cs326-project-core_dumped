@@ -80,6 +80,44 @@ class Server {
             }
         });
 
+        /**
+         * Route for deleting a single expense from the ledger
+         * Sends back a string showing what was deleted
+         */
+        self.app.delete('/deleteExpense', async (request, response) => {
+            try {
+                const {title, amt, freq} = request.body;
+                await self.database.deleteExpense(title, amt, freq);
+                response.status(200).send(`
+                    Successfully deleted {title : ${title},
+                    amt : ${amt},
+                    freq : ${freq}}`);
+            } catch (error) {
+                console.log("Expense deletion failed, error is...");
+                console.log(error);
+                response.status(500).send(error);
+            }
+        });
+
+        /**
+         * Route for deleting a single transaction from the ledger
+         * Sends back a string showing what was deleted
+         */
+         self.app.delete('/deleteTransaction', async (request, response) => {
+            try {
+                const {amt, des} = request.body;
+                await self.database.deleteTransaction(amt, des);
+                response.status(200).send(`
+                    Successfully deleted {amt : ${amt}, des : ${des}}`);
+            } catch (error) {
+                console.log("Transaction deletion failed, error is...");
+                console.log(error);
+                response.status(500).send(error);
+            }
+        });
+
+
+
         //route to respond to bad requests
         self.app.all('*', async (request, response) => {
             response.status(404).send(`

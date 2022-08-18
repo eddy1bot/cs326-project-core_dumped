@@ -122,4 +122,38 @@ export class Database {
         }
         return final;
     }
+
+    /** Deletes and expense from the database
+     *
+     * @param {string} title the title of the expense to delete
+     * @param {integer} amt the amount of the expense to delete
+     * @param {string} freq the frequency of the expense to delete
+     */
+    async deleteExpense(title, amt, freq) {
+        const queryText =
+            'DELETE FROM transactionLedger WHERE title = $1 AND amt = $2' +
+            ' AND freq = $3';
+        try {
+            const response = this.client.query(queryText, [title, amt, freq]);
+        } catch (error) {
+            console.log("Something broke, the error is....");
+            console.log(error);
+        }
+    }
+
+    /** Deletes a transaction from the database
+     *
+     * @param {integer} amt the amount of the transaction to delete
+     * @param {*} des the description of hte transaction to delete
+     */
+    async deleteTransaction(amt, des) {
+        const queryText =
+            'DELETE FROM transactionLedger WHERE amt = $1 AND des = $2';
+        try {
+            const response = this.client.query(queryText, [amt, des]);
+        } catch (error) {
+            console.log("Something broke, the error is....");
+            console.log(error);
+        }
+    }
 }
