@@ -1,87 +1,92 @@
 export async function logExpense(object) {
 
     let title = object.title;
-    let amt = object.amount;
-    let freq = object.frequency;
+    let amt = object.amt;
+    let freq = object.freq;
 
     const response = await fetch(
         `/logExpense`,
         {
+            headers: {
+                'Content-Type' : 'application/json'
+            },
             method : 'POST',
-            body: {title : title, amt : amt, freq : freq},
+            body: JSON.stringify({title : title, amt : amt, freq : freq}),
         }
     );
-    const data = await response.json();
-    return data;
 }
 
 export async function logTransaction(object) {
 
-    let amt = object.amount;
-    let des = object.description;
+    let amt = object.amt;
+    let des = object.des;
+
+    console.log(amt);
+    console.log(des);
 
     const response = await fetch(
         `/logTransaction`,
         {
+            headers: {
+                'Content-Type' : 'application/json'
+            },
             method : 'POST',
-            body: {amt : amt, des : des},
+            body: JSON.stringify({amt : amt, des : des}),
         }
     );
-    const data = await response.json();
-    return data;
 }
 
-export async function getExpenseLog() {
+export async function getExpenseLedger() {
     const response = await fetch(
         `/getExpenseLog`,
         {
             method : 'GET',
         }
     );
-    const data = await response.json();
-    return data;
+    return await response.json();
 }
 
-export async function getTransactionLog() {
+export async function getTransactionLedger() {
     const response = await fetch(
         `/getTransactionLog`,
         {
             method : 'GET',
         }
     );
-    const data = await response.json();
-    return data;
+    return await response.json();
 }
 
 export async function deleteExpense(object) {
 
     let title = object.title;
-    let amt = object.amount;
-    let freq = object.frequency;
+    let amt = object.amt;
+    let freq = object.freq;
 
     const response = await fetch(
         `/deleteExpense`,
         {
+            headers: {
+                'Content-Type' : 'application/json'
+            },
             method : 'DELETE',
-            body : {title : title, amt : amt, freq : freq},
+            body : JSON.stringify({title : title, amt : amt, freq : freq}),
         }
     );
-    const data = await response.json();
-    return data;
 }
 
 export async function deleteTransaction(object) {
 
-    let amt = object.amount;
-    let des = object.description;
+    let amt = object.amt;
+    let des = object.des;
 
     const response = await fetch(
         `/deleteTransaction`,
         {
+            headers: {
+                'Content-Type' : 'application/json'
+            },
             method : 'DELETE',
-            body : {amt : amt, des : des},
+            body : JSON.stringify({amt : amt, des : des}),
         }
     );
-    const data = await response.json();
-    return data;
 }

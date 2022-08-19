@@ -2,9 +2,8 @@ import { Controller } from "./controller.js";
 import { Expense } from "./expense.js";
 import { Transaction } from "./transaction.js";
 
-
-
 const controller = new Controller();
+await controller.initalizeLedgers();
 controller.printExpenseLedger();
 controller.printTransactionLedger();
 
@@ -16,7 +15,9 @@ document.getElementById("add_expense_button").addEventListener("click", () => {
     const title = document.getElementById("expense_title").value;
     let tentativeAmount = document.getElementById("expense_amount").value;
 
-    if(title === '' || tentativeAmount === '') {
+    if (isNaN(tentativeAmount)) {
+        window.alert("Please enter only numbers in the 'amount' field");
+    } else if(title === '' || tentativeAmount === '') {
         window.alert("Please enter the title and amount of an expense to add");
     } else {
         const amount =
@@ -42,7 +43,9 @@ document.getElementById("remove_expense_button").addEventListener("click", () =>
     const title = document.getElementById("expense_title").value;
     let tentativeAmount = document.getElementById("expense_amount").value;
 
-    if(title === '' || tentativeAmount === '') {
+    if (isNaN(tentativeAmount)) {
+        window.alert("Please enter only numbers in the 'amount' field");
+    } else if(title === '' || tentativeAmount === '') {
         window.alert("Please enter the title and amount of an expense to remove");
     } else {
         const amount =
@@ -69,7 +72,9 @@ document.getElementById("remove_trans_button").addEventListener("click", () => {
         let tentativeAmount = document.getElementById("trans_amt").value;
 
         //check if amount is specified
-        if(tentativeAmount === '' || description === '') {
+        if (isNaN(tentativeAmount)) {
+            window.alert("Please enter only numbers in the 'amount' field");
+        } else if(tentativeAmount === '' || description === '') {
             window.alert("Please enter the amount and description" +
                 "of the transaction you wish to remove");
         } else {
@@ -114,7 +119,9 @@ document.getElementById("transaction_post").addEventListener("click", () => {
         let tentativeAmount = document.getElementById("transaction_amt").value;
 
         //check if amount is specified
-        if(tentativeAmount === '') {
+        if (isNaN(tentativeAmount)) {
+            window.alert("Please enter only numbers in the 'amount' field");
+        } else if(tentativeAmount === '') {
             window.alert("Please enter the amount of the transaction to add");
         } else {
             const amount =
@@ -149,7 +156,9 @@ document.getElementById("transaction_post").addEventListener("click", () => {
         let tentativeAmount = document.getElementById("add_rev_input").value;
 
         //check if amount is specified
-        if(tentativeAmount === '') {
+        if (isNaN(tentativeAmount)) {
+            window.alert("Please enter only numbers in the 'amount' field");
+        } else if(tentativeAmount === '') {
         window.alert("Please enter amount of additional revenue to add");
         } else {
             const amount =

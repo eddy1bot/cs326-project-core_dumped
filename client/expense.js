@@ -1,8 +1,8 @@
 export class Expense {
     constructor(title, amount, frequency) {
         this.title = title;
-        this.amount = amount;
-        this.frequency = frequency;
+        this.amt = amount;
+        this.freq = frequency;
     }
 
     /**
@@ -18,7 +18,7 @@ export class Expense {
      * @returns the int amount of this expense object
      */
     getAmount() {
-        return this.amount;
+        return this.amt;
     }
 
     /**
@@ -26,6 +26,6 @@ export class Expense {
      * @returns the string frequency of this expense object
      */
     getFrequency() {
-        return this.frequency;
+        return this.freq;
     }
 }

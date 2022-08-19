@@ -1,7 +1,7 @@
 export class Transaction {
     constructor(amount, description) {
-        this.amount = amount;
-        this.description = description;
+        this.amt = amount;
+        this.des = description;
     }
 
     /**
@@ -9,7 +9,7 @@ export class Transaction {
      * @returns the int amount of this expense object
      */
     getAmount() {
-        return this.amount;
+        return this.amt;
     }
 
     /**
@@ -17,6 +17,6 @@ export class Transaction {
      * @returns the string frequency of this expense object
      */
     getDescription() {
-        return this.description;
+        return this.des;
     }
 }

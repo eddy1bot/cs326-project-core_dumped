@@ -3,24 +3,6 @@ import * as crud from "./clientCRUD.js";
 export class Controller {
 
     constructor() {
-        //initalize the expense array
-        this.expenseLedger = crud.getExpenseLedger();
-        // if(window.localStorage.getItem('expenseLedger') === null) {
-        //     this.expenseLedger = [];
-        // } else {
-        //     this.expenseLedger =
-        //         JSON.parse(window.localStorage.getItem('expenseLedger'));
-        // }
-
-        //initalize transaction ledger
-        this.transactionLedger = crud.getTransactionLedger();
-        // if(window.localStorage.getItem('transactionLedger') === null) {
-        //     this.transactionLedger = [];
-        // } else {
-        //     this.transactionLedger =
-        //         JSON.parse(window.localStorage.getItem('transactionLedger'));
-        // }
-
         if(window.localStorage.getItem('Paycheck_input') === null) {
             //Initalize UAR
             this.UAR = 0;
@@ -46,24 +28,38 @@ export class Controller {
         }
     }
 
+    async initalizeLedgers() {
+        //initalize the expense array
+        this.expenseLedger = await crud.getExpenseLedger();
+
+        //initalize transaction ledger
+        this.transactionLedger = await crud.getTransactionLedger();
+    }
+
 
     /** Adds the given transaction the ledger array of transactions
      *
      * @param {transaction} object representing a transaction
      */
     addTransaction(object) {
-        this.transactionLedger.push(object);
+        const isEqual = (first, second) => {
+            return JSON.stringify(first) === JSON.stringify(second);
+        }
 
-        this.printTransactionLedger();
+        if (this.transactionLedger.some( (v) => isEqual(v, object))) {
+                window.alert("Duplicate transactions are not allowed");
+        } else {
+            this.transactionLedger.push(object);
 
-        //save changes
-        crud.logTransaction(object);
-        // window.localStorage.setItem('transactionLedger',
-        //     JSON.stringify(this.transactionLedger));
+            this.printTransactionLedger();
 
-        //recalculate UAR
-        if(document.getElementById("Paycheck_input").value != '') {
-            this.calculateUAR();
+            //save changes
+            crud.logTransaction(object);
+
+            //recalculate UAR
+            if(document.getElementById("Paycheck_input").value != '') {
+                this.calculateUAR();
+            }
         }
     }
 
@@ -73,18 +69,30 @@ export class Controller {
      * @param {expense} object representing an expense
      */
     addExpense(object) {
-        this.expenseLedger.push(object);
 
-        this.printExpenseLedger();
+        const isEqual = (first, second) => {
+            return JSON.stringify(first) === JSON.stringify(second);
+        }
 
-        //save changes
-        crud.logExpense(object);
-        // window.localStorage.setItem('expenseLedger',
-        //     JSON.stringify(this.expenseLedger));
+        //check for duplicate expense entries (which will blow up server lol)
+        if (this.expenseLedger.some( (v) => isEqual(v, object))) {
+            window.alert("Duplicate expenses are not allowed");
+        } else {
+            console.log("Object is: ");
+            console.log(object);
+            this.expenseLedger.push(object);
 
-        //recalculate
-        if(document.getElementById("Paycheck_input").value != '') {
-            this.calculateUAR();
+            this.printExpenseLedger();
+
+            //save changes
+            crud.logExpense(object);
+            // window.localStorage.setItem('expenseLedger',
+            //     JSON.stringify(this.expenseLedger));
+
+            //recalculate
+            if(document.getElementById("Paycheck_input").value != '') {
+                this.calculateUAR();
+            }
         }
     }
 
@@ -150,7 +158,7 @@ export class Controller {
         //reprint ledger based on updated ledger array
         this.expenseLedger.forEach( (v) => {
             document.getElementById("expense_list").value +=
-                v.title + " (" + v.frequency + ") - $" + v.amount + "\n\n";
+                v.title + " (" + v.freq + ") - $" + v.amt + "\n\n";
         });
     }
 
@@ -165,7 +173,7 @@ export class Controller {
     //reprint ledger based on updated ledger array
     this.transactionLedger.forEach( (v) => {
         document.getElementById("transaction_list").value +=
-            v.description + " - $" + v.amount + "\n";
+            v.des + " - $" + v.amt + "\n";
     });
 }
 
@@ -183,18 +191,20 @@ export class Controller {
             window.alert("Please enter a valid numberical paycheck amount");
         } else {
 
+            console.log(paycheck);
+
             this.expenseLedger.forEach( (v) => {
-                if(v.frequency === 'Weekly') {
-                    paycheck -= v.amount;
-                } else if (v.frequency === 'Biweekly') {
-                    paycheck -= (v.amount / 2);
+                if(v.freq === 'Weekly') {
+                    paycheck -= v.amt;
+                } else if (v.freq === 'Biweekly') {
+                    paycheck -= (v.amt / 2);
                 } else {
-                    paycheck -= (v.amount / 4);
+                    paycheck -= (v.amt / 4);
                 }
             });
 
             this.transactionLedger.forEach( (v) => {
-                paycheck -= v.amount;
+                paycheck -= v.amt;
             });
 
             document.getElementById("UAR_remaining").value =

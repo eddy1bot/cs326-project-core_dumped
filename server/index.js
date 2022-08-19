@@ -6,10 +6,11 @@ import logger from "morgan";
 
 class Server {
     constructor(dburl) {
+
         this.dburl = dburl;
         this.app = express();
         this.app.use('/', express.static("client"));
-        this.app.use(express.urlencoded({ extended : false}));
+        this.app.use(express.urlencoded({ extended : true }));
         this.app.use(logger('dev'));
         this.app.use(express.json());
     }
@@ -23,9 +24,11 @@ class Server {
          */
         self.app.post('/logExpense', async (request, response) => {
             try {
-                const {title, amt, freq} = request.body;
-                await self.database.saveExpense(title, amt, freq);
-                response.status(200).json({ "status" : "success" });
+                const title = request.body.title;
+                const amt = request.body.amt;
+                const freq = request.body.freq;
+                const res = await self.database.saveExpense(title, amt, freq);
+                response.status(200).send(JSON.stringify(res));
             } catch (error) {
                 console.log("Logging expense failed, error is...");
                 console.log(error);
@@ -40,9 +43,10 @@ class Server {
          */
         self.app.post('/logTransaction', async (request, response) => {
             try {
-                const {amt, des} = request.body;
-                await self.database.saveTransaction(amt, des);
-                response.status(200).json({ "status" : "success" });
+                const amt = request.body.amt;
+                const des = request.body.des;
+                const res = await self.database.saveTransaction(amt, des);
+                response.status(200).send(JSON.stringify(res));
             } catch (error) {
                 console.log("Logging transaction failed, error is...");
                 console.log(error);
@@ -86,10 +90,11 @@ class Server {
          */
         self.app.delete('/deleteExpense', async (request, response) => {
             try {
-                const {title, amt, freq} = request.body;
-                await self.database.deleteExpense(title, amt, freq);
-                response.status(200).send(`{title : ${title}, amt : ${amt},
-                    freq : ${freq}}`);
+                const title = request.body.title;
+                const amt = request.body.amt;
+                const freq = request.body.freq;
+                const res = await self.database.deleteExpense(title, amt, freq);
+                response.status(200).send(JSON.stringify(res));
             } catch (error) {
                 console.log("Expense deletion failed, error is...");
                 console.log(error);
@@ -103,9 +108,10 @@ class Server {
          */
          self.app.delete('/deleteTransaction', async (request, response) => {
             try {
-                const {amt, des} = request.body;
-                await self.database.deleteTransaction(amt, des);
-                response.status(200).send(`{amt : ${amt}, des : ${des}}`);
+                const amt = request.body.amt;
+                const des = request.body.des;
+                const res = await self.database.deleteTransaction(amt, des);
+                response.status(200).send(JSON.stringify(res));
             } catch (error) {
                 console.log("Transaction deletion failed, error is...");
                 console.log(error);
@@ -136,6 +142,5 @@ class Server {
         })
     }
 }
-
 const server = new Server(process.env.DATABASE_URL);
 server.start();
