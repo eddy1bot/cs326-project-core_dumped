@@ -1,4 +1,4 @@
-# The Parachute Project (milestone 2)
+# The Parachute Project (milestone 3)
 ## Team name: *core_dumped*
 ## Team Overview:
 - *Eddy Botelho - eddy1bot*
